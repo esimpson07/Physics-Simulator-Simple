@@ -66,7 +66,7 @@ function getHeight(start, current) { //returns the height of the ball at a given
     startX += metersToPX * xDist; //makes the bounce start further along the canvas
     yCom *= elasticity; //decreases the bounce height
     psuedoFire(); //recalculates
-    var y = ((x * x) * gravity / 2) + (yCom * x); //recalculates y value for bounce
+    y = ((x * x) * gravity / 2) + (yCom * x); //recalculates y value for bounce
   }
   return y;
 }
