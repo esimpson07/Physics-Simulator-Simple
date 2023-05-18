@@ -10,13 +10,12 @@ var xCom = 0; //x component of fire vector
 var yCom = 0; //y component of fire vector
 var elasticity = 0.8; // ratio of bounce vel / prev bounce vel
 var startX = 0; // the starting x position of the current bounce
-const cannonPos = []; //coordinates of cannon position
+const cannonPos = [10,390]; //coordinates of cannon position (10,390) is the bottom left of the screen
 
 function setup() {
   createCanvas(400, 400); //400 x 400 window -> 30 PX = 1 meter
   frameRate(30); //X FPS -> X dots per second
   background(240); // set background to (240,240,240)
-  cannonPos.push(10,390); //set cannon position to 10, 390 -> bottom left of the screen
 }
 
 function draw() {
