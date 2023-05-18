@@ -22,7 +22,11 @@ function setup() {
 function draw() {
     angle = abs(atan((mouseY - cannonPos[1]) / (mouseX - cannonPos[0]))); // give the cannon an angle
   fill(255, 60, 100); // sets the circle color to red
-  circle(cannonPos[0] + startX + (metersToPX * xDist * (millis() - initMillis) / (airTime * 1000)),(400 - (metersToPX * getHeight(initMillis, millis()))) - (400 - cannonPos[1]),10);
+  var x = cannonPos[0] + startX + (metersToPX * xDist * (millis() - initMillis) / (airTime * 1000)); //finds function distance based on pixel: meter ratio and the distance traveled
+  var y = (400 - (metersToPX * getHeight(initMillis, millis()))) - (400 - cannonPos[1]); //inverse because 0,0 is top left: finds function height based on time
+  if(x >= cannonPos[0] && y <= cannonPos[1]) { //checks for inconsistencies: rounding errors could cause position to be slightly below the "ground"
+    circle(x, y, 10);
+  }
   fill(0, 0, 0); // draws a dot depending on how far the shot is
   circle(cannonPos[0],cannonPos[1],20); // draws cannon
 }
@@ -41,9 +45,9 @@ function keyPressed(){
 }
 
 function fire(a, p) {
-  xCom = firePower * cos(a);
-  yCom = firePower * sin(a);
-  psuedoFire();
+  xCom = firePower * cos(a); //defining the x component of the fire vector
+  yCom = firePower * sin(a); //defining the y component of the fire vector
+  psuedoFire(); //doing the math to find all the values
   fill(0,0,0);
   circle(cannonPos[0] + 10 * cos(angle), cannonPos[1] - 10 * sin(angle), 20); // draws end of cannon pointing in fire direction
 }
@@ -52,17 +56,17 @@ function psuedoFire() { // does the math to find time that the current bounce is
   airTime = - 2 * abs(yCom) / gravity
   xDist = xCom * airTime;
   yDist = -(yCom * yCom) / (2 * gravity);
-  initMillis = millis();
+  initMillis = millis(); //sets the start of the bounce to now
 }
 
 function getHeight(start, current) { //returns the height of the ball at a given instant, based on when psuedoFire() was last called. If the height is less than 0, the function refires the ball but with less velocity.
   var x = (current - start) / 1000;
   var y = ((x * x) * gravity / 2) + (yCom * x);
   if(y < 0) {
-    startX += metersToPX * xDist;
-    yCom *= elasticity;
-    psuedoFire();
-    var y = ((x * x) * gravity / 2) + (yCom * x);
+    startX += metersToPX * xDist; //makes the bounce start further along the canvas
+    yCom *= elasticity; //decreases the bounce height
+    psuedoFire(); //recalculates
+    var y = ((x * x) * gravity / 2) + (yCom * x); //recalculates y value for bounce
   }
   return y;
 }
