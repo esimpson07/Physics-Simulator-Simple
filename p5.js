@@ -6,8 +6,10 @@ var xDist = 0;
 var yDist = 0;
 var airTime = 0;
 var initMillis = 0;
+var xCom = 0;
 var yCom = 0;
-var elasticity = 0.5;
+var elasticity = 0.8;
+var yMult = 1;
 var startX = 0;
 var dT = 100; //milliseconds
 const cannonPos = [];
@@ -42,7 +44,7 @@ function keyPressed(){
 
 function fire(a, p) {
   var pos = 0;
-  var xCom = firePower * cos(a);
+  xCom = firePower * cos(a);
   yCom = firePower * sin(a);
   airTime = - 2 * abs(yCom) / gravity
   xDist = xCom * airTime;
@@ -56,8 +58,12 @@ function getHeight(start, current) {
   var vInitial = yCom;
   var y = ((x * x) * a / 2) + (vInitial * x);
   if(y < 0) {
-    initMillis = millis();
     startX = metersToPX * xDist + startX;
+    yCom *= elasticity;
+    airTime = - 2 * abs(yCom) / gravity
+    xDist = xCom * airTime;
+    yDist = -(yCom * yCom) / (2 * gravity);
+    initMillis = millis();
   }
   return y;
 }
